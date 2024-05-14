@@ -238,7 +238,18 @@ def read_write_from_all_topics(bag_file, print_out=False):
         path, topic_name = "/".join(tmp[:-1]),tmp[-1]
         path = bag_file[:bag_file.rfind("/")]+""+path
         os.makedirs(path, exist_ok=True)
+        # 중괄호 없이 출력하기 위한 변경 사항
+        timestamps_str = ', '.join(map(str, timestamps))
+        messages_str = ', '.join(map(str, messages))
+        output = f"Topic: {topic_name}\nTimestamps: {timestamps_str}\nMessages: {messages_str}\n"
+        
+        # csv 파일로 저장
         save_csv_file.save_csv_file([timestamps, messages],path + "/" + topic_name+".csv")
+        
+        # 출력 내용을 파일로 저장
+        output_file = path + "/" + topic_name + ".txt"
+        with open(output_file, 'w') as f:
+            f.write(output)
 
     # Close connection to the database
     close(connection)
