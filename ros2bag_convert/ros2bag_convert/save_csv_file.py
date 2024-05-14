@@ -24,6 +24,12 @@ def save_csv_file(data, csv_file_name, version=0, print_out=False):
                 field_names = ['time']+list(row_data.keys())
                 writer = csv.DictWriter(csv_file,fieldnames=field_names)
                 writer.writeheader()
+            ####################################################################
+            #make message to string for remove {}
+            for key, value in row_data.items():
+                if isinstance(value, dict):
+                    row_data[key] = str(value).replace("{", "").replace("}", "")
+            ####################################################################
             row_data["time"] = row_time
             # row_data = [row_time]+list(row_data.values())
             writer.writerow(row_data)
